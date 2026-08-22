@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   setYear();
-  preloadHeroImages();
   startHeroSlider();
   updateLogoState();
 
@@ -45,27 +44,28 @@ function setYear() {
 const hero = document.querySelector(".hero");
 
 const fondos = [
-  "https://res.cloudinary.com/dph6jbszd/image/upload/v1787421152/393D549D-E655-40BA-806B-D4810A7D6577_2_jqbeks.jpg",
-  "https://res.cloudinary.com/dph6jbszd/image/upload/v1787421144/542f5b38-3e59-437f-b2dd-f1eb328e4932_kzsnvq.jpg",
-  "https://res.cloudinary.com/dph6jbszd/image/upload/v1787421143/IMG_0058_Original_kl5jcm.jpg",
-  "https://res.cloudinary.com/dph6jbszd/image/upload/v1787421143/f1e15bb0-7607-4fd0-8c1f-998eafe05447_gzxjep.jpg"
+  "https://res.cloudinary.com/dph6jbszd/image/upload/f_auto,q_auto,w_1600/v1787421152/393D549D-E655-40BA-806B-D4810A7D6577_2_jqbeks.jpg",
+  "https://res.cloudinary.com/dph6jbszd/image/upload/f_auto,q_auto,w_1600/v1787421144/542f5b38-3e59-437f-b2dd-f1eb328e4932_kzsnvq.jpg",
+  "https://res.cloudinary.com/dph6jbszd/image/upload/f_auto,q_auto,w_1600/v1787421143/IMG_0058_Original_kl5jcm.jpg",
+  "https://res.cloudinary.com/dph6jbszd/image/upload/f_auto,q_auto,w_1600/v1787421143/f1e15bb0-7607-4fd0-8c1f-998eafe05447_gzxjep.jpg"
 ];
 
 
 let fondoIndex = 0;
 
-function preloadHeroImages() {
-  fondos.forEach(src => {
-    const img = new Image();
-    img.src = src;
-  });
+function preloadHeroImage(src) {
+  if (navigator.connection?.saveData || window.matchMedia("(prefers-reduced-data: reduce)").matches) return;
+  const img = new Image();
+  img.src = src;
 }
 
 function startHeroSlider() {
   if (!hero) return;
+  preloadHeroImage(fondos[1]);
   setInterval(() => {
     fondoIndex = (fondoIndex + 1) % fondos.length;
     hero.style.backgroundImage = `url('${fondos[fondoIndex]}')`;
+    preloadHeroImage(fondos[(fondoIndex + 1) % fondos.length]);
   }, 7000);
 }
 
